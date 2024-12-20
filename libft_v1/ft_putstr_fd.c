@@ -1,44 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strrchr.c                                       :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vloddo <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/28 14:23:53 by vloddo            #+#    #+#             */
-/*   Updated: 2024/11/28 14:23:55 by vloddo           ###   ########.fr       */
+/*   Created: 2024/12/10 20:04:53 by vloddo            #+#    #+#             */
+/*   Updated: 2024/12/10 20:04:55 by vloddo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strlen_int(const char *a)
+void	ft_putstr_fd(char *s, int fd)
 {
 	int	i;
 
 	i = 0;
-	while (a[i] != '\0')
+	while (s[i] != '\0')
 	{
+		write(fd, &s[i], 1);
 		i++;
 	}
-	return (i);
 }
-
-char	*ft_strrchr(const char *s, int c)
-{
-	int	i;
-
-	i = ft_strlen_int(s);
-	while (i >= 0 && (unsigned char)c != s[i])
-		i--;
-	if (s[i] == (unsigned char)c)
-		return ((char *)&s[i]);
-	return (NULL);
-}
-
-// #include <stdio.h>
-
-// int main()
-// {
-// 	printf("Risultato: %s\n", ft_strrchr("teste",'e'));
-// }

@@ -26,3 +26,14 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	}
 	return (dst);
 }
+// int main()
+// {
+//     char    str[10] = "pingo";
+//     char    str2[10];
+//     printf("%s\n", str);
+//     printf("%s\n", str2);
+//     ft_memcpy(str2, str, 2);
+//     printf("%s\n", str);
+//     printf("%s\n", str);
+//     return (0);
+// }

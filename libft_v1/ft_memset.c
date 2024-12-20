@@ -15,14 +15,21 @@
 void	*ft_memset(void *s, int c, size_t n)
 {
 	unsigned char	*p;
-	unsigned int	i;
+	size_t			i;
 
 	i = 0;
 	p = s;
 	while (i < n)
 	{
-		p[i] = (unsigned char)c;
+		p[i] = (unsigned char )c;
 		i++;
 	}
 	return (s);
 }
+
+// int	main()
+// {
+// 	char str[50] = "Ciao";
+// 	printf("Mio: %s\n", (unsigned char *)ft_memset(str, 'C', 2));
+// 	printf("Original: %s\n", (unsigned char *)memset(str, 'C', 2));
+// }

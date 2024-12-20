@@ -1,44 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strrchr.c                                       :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vloddo <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/28 14:23:53 by vloddo            #+#    #+#             */
-/*   Updated: 2024/11/28 14:23:55 by vloddo           ###   ########.fr       */
+/*   Created: 2024/12/02 14:28:45 by vloddo            #+#    #+#             */
+/*   Updated: 2024/12/02 14:29:36 by vloddo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strlen_int(const char *a)
+void	*ft_calloc(size_t num, size_t size)
 {
-	int	i;
+	size_t	total_size;
+	void	*ptr;
 
-	i = 0;
-	while (a[i] != '\0')
-	{
-		i++;
-	}
-	return (i);
+	total_size = num * size;
+	if (num != 0 && total_size / num != size)
+		return (NULL);
+	ptr = malloc(total_size);
+	if (!ptr)
+		return (NULL);
+	ft_memset(ptr, 0, total_size);
+	return (ptr);
 }
-
-char	*ft_strrchr(const char *s, int c)
-{
-	int	i;
-
-	i = ft_strlen_int(s);
-	while (i >= 0 && (unsigned char)c != s[i])
-		i--;
-	if (s[i] == (unsigned char)c)
-		return ((char *)&s[i]);
-	return (NULL);
-}
-
-// #include <stdio.h>
-
-// int main()
-// {
-// 	printf("Risultato: %s\n", ft_strrchr("teste",'e'));
-// }

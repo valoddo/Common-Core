@@ -38,3 +38,9 @@ int	ft_atoi(const char *str)
 	n = n * sign;
 	return (n);
 }
+
+// int	main()
+// {
+// 	printf("Mio: %d\n", ft_atoi("555"));
+// 	printf("Mio: %d\n", atoi("555"));
+// }

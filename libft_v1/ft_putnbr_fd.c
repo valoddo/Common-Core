@@ -1,44 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strrchr.c                                       :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vloddo <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/28 14:23:53 by vloddo            #+#    #+#             */
-/*   Updated: 2024/11/28 14:23:55 by vloddo           ###   ########.fr       */
+/*   Created: 2024/12/10 20:10:47 by vloddo            #+#    #+#             */
+/*   Updated: 2024/12/10 20:10:49 by vloddo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strlen_int(const char *a)
+void	ft_putnbr_fd(int n, int fd)
 {
-	int	i;
+	char	c;
+	int		i;
 
-	i = 0;
-	while (a[i] != '\0')
+	if (n == -2147483648)
 	{
-		i++;
+		write(fd, "-2147483648", 11);
+		return ;
 	}
-	return (i);
+	if (n < 0)
+	{
+		write(fd, "-", 1);
+		n *= -1;
+	}
+	i = 1;
+	while (n / i > 9)
+	{
+		i *= 10;
+	}
+	while (i > 0)
+	{
+		c = (n / i) + '0';
+		n %= i;
+		write(fd, &c, 1);
+		i /= 10;
+	}
 }
-
-char	*ft_strrchr(const char *s, int c)
-{
-	int	i;
-
-	i = ft_strlen_int(s);
-	while (i >= 0 && (unsigned char)c != s[i])
-		i--;
-	if (s[i] == (unsigned char)c)
-		return ((char *)&s[i]);
-	return (NULL);
-}
-
-// #include <stdio.h>
-
-// int main()
-// {
-// 	printf("Risultato: %s\n", ft_strrchr("teste",'e'));
-// }

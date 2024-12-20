@@ -12,38 +12,48 @@
 
 #include "libft.h"
 
-char *ft_strnstr(const char *big, const char *little, size_t len)
+int	ft_strlen_int(const char *a)
+{
+	int	i;
+
+	i = 0;
+	while (a[i] != '\0')
+	{
+		i++;
+	}
+	return (i);
+}
+
+char	*ft_strnstr(const char *big, const char *little, size_t len)
 {
 	size_t	i;
 	size_t	j;
 
 	i = 0;
-	j = 0;
-
-	if (!little)
-        return ((char *)big);
-	while (i < len && !big)
+	if (!little || !big)
+		return ((char *)big);
+	if (big && big[0] == '\0' && little[0] == '\0')
+		return ((char *)big);
+	while (i <= len && big[i] != '\0')
 	{
-		if (big[i] == little[i])
+		j = 0;
+		while (big[i + j] == little[j] && big[i + j] != '\0' && \
+		little[j] != '\0' && i + j < len)
 		{
-			while (big[i] == little[i])
-			{
-				i++;
-			}
-			return ((char *)little);
+			j++;
+		}
+		if (little[j] == '\0')
+		{
+			return ((char *)&big[i]);
 		}
 		i++;
 	}
 	return (NULL);
 }
 
-#include <stdio.h>
-#include <string.h>
-int	main()
-{
-	char big[20] = "Hello World";
-	char little[10] = "World";
+// int main()
+// {
+// 	printf("Mia: %p\n", ft_strnstr("", "", 9));
+// 	//printf("Original: %d\n", strnstr("MZIRIBMZIRIBMZE123", "MZIRIBMZE", 9));
 
-	printf("%d", (int)ft_strnstr("Hello","Z",6));
-	printf("%d", (int)strnstr("Hello","Z",6));
-}
+// }

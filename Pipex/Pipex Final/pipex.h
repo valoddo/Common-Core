@@ -35,17 +35,16 @@ typedef struct s_pipex
 	char	**paths; //array di percorsi da cercare per i comandi 
 }			t_pipex;
 
-int		main(int argc, char **argv, char **envp)
-void	child_process(t_pipex pipex, char **argv, char **envp, int child)
-char	*check_args(char **paths, char *argcmd)
-char	**ft_get_path(char **envp)
-void	ft_error(char *str, int error)
+void	child_process(t_pipex pipex, char **argv, char **envp, int child);
+char	*check_args(char **paths, char *argcmd);
+char	**ft_get_path(char **envp);
+void	ft_error(char *str, int error);
 
-int		ft_strncmp(const char *s1, const char *s2, size_t n)
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
-char	**ft_split(const char *s, char c)
-static int	count_words(const char *s, char c)
+char	**ft_split(const char *s, char c);
+static int	count_words(const char *s, char c);
 
-char	*ft_strjoin(char const *s1, char const *s2)
-size_t	ft_strlen(const char *a)
+char	*ft_strjoin(char const *s1, char const *s2);
+size_t	ft_strlen(const char *a);
 #endif

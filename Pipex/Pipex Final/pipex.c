@@ -59,10 +59,10 @@ void	child_process(t_pipex pipex, char **argv, char **envp, int child)
 		pipex.arg_cmd = ft_split(argv[3], ' '); // Divide il comando in argomenti
 	}
 	if (!pipex.arg_cmd || !pipex.arg_cmd[0]) // Controlla se il comando è vuoto o non valido
-    	ft_errors("Command not found", 1);
+    	ft_error("Command not found", 1);
 	pipex.cmd = check_args(pipex.paths, pipex.arg_cmd[0]); // Cerca il comando in PATH
 	if (!pipex.cmd) // Se il comando non è valido, gestisci l'errore
-		ft_errors("Command not valid", 1);
+		ft_error("Command not valid", 1);
 	execve(pipex.cmd, pipex.arg_cmd, envp); // Esegue il comando
 }
 int main(int argc, char **argv, char **envp)
@@ -71,7 +71,7 @@ int main(int argc, char **argv, char **envp)
 
 	if (argc != 5)
 		ft_error("Argument missed", 1);
-	pipex.path = ft_get_path(envp);
+	pipex.paths = ft_get_path(envp);
 	pipex.infd = open(argv[1], O_RDONLY);
 	if (pipex.infd == -1)
 		ft_error(argv[1], 1);
@@ -79,7 +79,7 @@ int main(int argc, char **argv, char **envp)
 	if (pipex.outfd == -1)
 		ft_error(argv[4], 1);
 	if (pipe(pipex.pipe_fd) == -1)
-		ft_errors("Error Pipe", 1);
+		ft_error("Error Pipe", 1);
 	pipex.p_id = fork();
 	if (pipex.p_id == 0)
 		child_process(pipex, argv, envp, 1);

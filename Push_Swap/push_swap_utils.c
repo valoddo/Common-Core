@@ -14,7 +14,9 @@
 
 int	ft_error(int i)
 {
-	if (i == 2)
+	if (i == 2) //errore del main se non ci sono argomenti 
 		write(1, "Error: insert items", 20);
+	else if (i == 3) //errore nell'atoi se ci sono caratteri e non numeri
+		write(1, "Error: insert correct number", 29);
 	return (0);
 }

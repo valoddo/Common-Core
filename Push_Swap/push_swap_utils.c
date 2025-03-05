@@ -18,5 +18,7 @@ int	ft_error(int i)
 		write(1, "Error: insert items", 20);
 	else if (i == 3) //errore nell'atoi se ci sono caratteri e non numeri
 		write(1, "Error: insert correct number", 29);
+	else if (i == 4) //errore nell'atoi se ci sono caratteri e non numeri
+		write(1, "Error: number presents more than once", 38);
 	return (0);
 }

@@ -33,4 +33,6 @@ typedef struct s_stack
 char	**ft_split(char const *s0, char const *s1, char c);
 int		ft_error(int i);
 // void test(char **c);
+void test_fill_a (t_stack *a);
+void	ft_fill_a(t_stack **a, char **argv);
 #endif

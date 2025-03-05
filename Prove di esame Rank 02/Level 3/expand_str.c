@@ -13,10 +13,8 @@ int main(int argc, char **argv)
         {
             while (argv[1][i+1] != '\0' && (argv[1][i] >= 9 && argv[1][i] <= 13 || argv[1][i] == ' ' ))
             {
-                //printf("B");
                 if (argv[1][i+1] != '\0' && argv[1][i+1] >= 97 && argv[1][i+1] <= 122)
                 {
-                    //printf("A");
                     write(1, "   ", 3);
                 }   
                 i++;

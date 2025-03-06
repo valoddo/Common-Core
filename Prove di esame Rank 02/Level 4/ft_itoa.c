@@ -48,7 +48,7 @@ char	*ft_itoa(int nbr)
 	while (len--)
 	{
 		if (str[len] == '-')
-			break;
+			return (str);
 		str[len] = (n % 10) + '0';
 		n /= 10;
 	}

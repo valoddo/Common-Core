@@ -20,7 +20,12 @@ int main(int argc, char **argv)
         if (argc == 2)
         while (argv[1][i])
         {
-                if ((argv[1][i] >= 65 && argv[1][i] <= 90) || (argv[1][i] >= 97 && argv[1][i] <= 122))
+                if (argv[1][i] == 'z' || argv[1][i] == 'Z')
+                {
+                        argv[1][i]-=25;
+                }
+                        
+                else if ((argv[1][i] >= 65 && argv[1][i] <= 89) || (argv[1][i] >= 97 && argv[1][i] <= 121))
                 {
                         argv[1][i]+=1;
                 }

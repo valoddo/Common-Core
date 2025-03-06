@@ -1,48 +1,45 @@
 #include <unistd.h>
 
-int    is_space(char c)
+int is_space(char c)
 {
-    return (c == ' ' || c == '\t');
+    return (c == ' ' || (c >= 9 && c <= 13));
 }
 
-void    rostring(char *str)
+int main(int argc, char **argv)
 {
-    int i;
+    int i = 0;
     int start;
+    int end = 0;
+    char *s1;
 
-    // Skip initial spaces
-    begin_space = 0;
-
-    while (str[i] && is_space(str[i]))
-        begin_space++;
-
-    // Find the end of the first word
-    start = i;
-
-    while (str[i] && !is_space(str[i]))
-        i++;
-
-    // Print the rest of the words
-    while (str[i])
+    if (argc == 2)
     {
-        if (!is_space(str[i]) && is_space(str[i - 1]))
+        s1 = argv[1];
+        while (s1[i] && is_space(s1[i]))
+            i++;
+        start = i;
+        while (s1[i] && !is_space(s1[i]))
+            i++;
+        end = i;
+        while (s1[i] && is_space(s1[i]))
+            i++;
+        while (s1[i])
         {
-            while (str[i] && !is_space(str[i]))
-            {
-                write(1, &str[i], 1);
+                write(1, &s1[i], 1);
                 i++;
-            }
-            write(1, &str[i], 1);
+                while (s1[i] == ' ' && s1[i+1] == ' ')
+                    i++;
         }
-        i++;
+        if (end > start)
+        {
+            write(1, " ", 1);
+            while (s1[start] && !is_space(s1[start]))
+            {
+                write(1, &s1[start], 1);
+                start++;
+            }
+        }
     }
-
-    // Print the first word at the end
-
-    while (str[start] && !is_space(str[start]))
-    {
-        write(1, &str[start], 1);
-        start++;
-    };
-    write(1, "\n" 1);
+    write(1, "\n", 1);
+    return 0;
 }

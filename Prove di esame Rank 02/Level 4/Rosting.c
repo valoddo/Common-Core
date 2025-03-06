@@ -5,17 +5,6 @@ int    is_space(char c)
     return (c == ' ' || c == '\t');
 }
 
-void    ft_print_first_word(char *str, int begin_space)
-{
-    int idx = begin_space;
-
-    while (str[idx] && !is_space(str[idx]))
-    {
-        ft_putchar(str[idx]);
-        idx++;
-    }
-}
-
 void    rostring(char *str)
 {
     int i;

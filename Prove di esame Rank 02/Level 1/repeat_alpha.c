@@ -27,11 +27,11 @@ int	main(int argc, char **argv)
 		            j = 0;
 		            while (j < argv[1][i] - 64)
 		            {
-                        write(1, &argv[1][i], 1);
-                        j++;
-	                }
+                        	write(1, &argv[1][i], 1);
+                        	j++;
+			    }
 		        }
-		        else if (argv[1][i] >= 97 && argv[1][i] <= 122 )
+		    else if (argv[1][i] >= 97 && argv[1][i] <= 122 )
 	            {
 	                j = 0;
 		            while (j < (argv[1][i] - 96))
@@ -39,10 +39,10 @@ int	main(int argc, char **argv)
         	            write(1, &argv[1][i], 1);
 	                    j++;
 	                }
-		        }
-				else
-		        	write(1, &argv[1][i], 1);
-			i++;
+		    }
+		    else
+		        write(1, &argv[1][i], 1);
+				i++;
 		}
 	}
 	return (0);

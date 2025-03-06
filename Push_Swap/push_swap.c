@@ -19,6 +19,8 @@
 
 	i = 0;
 	j = 0;
+
+	printf("Test argv:\n");
 	while (c[i])
 	{
 		printf("%s\n", c[i]);
@@ -49,7 +51,7 @@ int	main(int argc, char **argv)
 	else if (argc == 2)
 		argv = ft_split(argv[0], argv[1], ' ');
 	//test_argv2(argv);
-	ft_fill_a(&a, argv);
+	ft_fill_stack(&a, argv);
 	test_fill_a(a);
 	return (0);
 }

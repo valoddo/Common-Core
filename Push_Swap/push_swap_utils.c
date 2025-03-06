@@ -15,10 +15,13 @@
 int	ft_error(int i)
 {
 	if (i == 2) //errore del main se non ci sono argomenti 
-		write(1, "Error: insert items", 20);
+		write(1, "Error: insert items\n", 20);
 	else if (i == 3) //errore nell'atoi se ci sono caratteri e non numeri
-		write(1, "Error: insert correct number", 29);
+		write(1, "Error: insert correct number\n", 29);
 	else if (i == 4) //errore nell'atoi se ci sono caratteri e non numeri
-		write(1, "Error: number presents more than once", 38);
+		write(1, "Error: number presents more than once\n", 38);
 	return (0);
 }
+
+
+   

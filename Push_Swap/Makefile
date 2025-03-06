@@ -9,7 +9,7 @@ CFLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 # Lista dei file sorgenti e oggetti
-SRCS = push_swap.c push_swap_utils.c ft_split.c
+SRCS = push_swap.c push_swap_utils.c ft_split.c ft_fill_stack.c
 
 OBJS = $(SRCS:.c=.o)
 

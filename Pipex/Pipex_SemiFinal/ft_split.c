@@ -12,32 +12,20 @@
 
 #include "pipex.h"
 
-static int	countwords(const char *s, char c)
+static int	count_words(const char *s, char c)
 {
-	int	r;
-	int	in_word;
+	int	i;
+	int	count;
 
-	r = 0;
-	in_word = 0;
-	while (*s)
+	i = 0;
+	count = 0;
+	while (s[i])
 	{
-		if (*s != c && in_word == 0)
-		{
-			r++;
-			in_word = 1;
-		}
-		else if (*s == c)
-			in_word = 0;
-		s++;
+		if ((s[i] != c) && (i == 0 || s[i - 1] == c))
+			count++;
+		i++;
 	}
-	return (r);
-}
-
-static void	ft_free(char **s, int i)
-{
-	while (i-- > 0)
-		free(s[i]);
-	free(s);
+	return (count);
 }
 
 static int	word_len(const char *s, unsigned int start, char end)
@@ -51,6 +39,13 @@ static int	word_len(const char *s, unsigned int start, char end)
 		start++;
 	}
 	return (i);
+}
+
+static void	ft_free(char **s, int i)
+{
+	while (i-- > 0)
+		free(s[i]);
+	free(s);
 }
 
 static char	**fill_split(char **dest, const char *s, char c, int words)
@@ -70,7 +65,11 @@ static char	**fill_split(char **dest, const char *s, char c, int words)
 			return (ft_free(dest, i), (NULL));
 		k = 0;
 		while (s[j] && s[j] != c)
-			dest[i][k++] = s[j++];
+		{
+			dest[i][k] = s[j];
+			k++;
+			j++;
+		}
 		dest[i][k] = '\0';
 		i++;
 	}
@@ -85,7 +84,7 @@ char	**ft_split(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	words = countwords(s, c);
+	words = count_words(s, c);
 	dest = (char **)malloc(sizeof(char *) * (words + 1));
 	if (!dest)
 		return (NULL);

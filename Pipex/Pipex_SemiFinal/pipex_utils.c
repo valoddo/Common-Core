@@ -60,3 +60,20 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	}
 	return (final);
 }
+
+void free_cmd_and_args(char **arg_cmd, char *cmd)
+{
+    if (arg_cmd)
+    {
+        int i = 0;
+        while (arg_cmd[i] != NULL) 
+        {
+            free(arg_cmd[i]);
+			i++;
+        }
+        free(arg_cmd);
+    }
+    if (cmd) 
+        free(cmd);
+}
+

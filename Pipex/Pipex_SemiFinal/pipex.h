@@ -28,9 +28,9 @@ typedef struct s_pipex
 {
 	int		infd;
 	int		outfd;
+	int		pipe_fd[2];
 	int		p_id;
 	int		p_id_2;
-	int		pipe_fd[2];
 	char	*cmd;
 	char	**arg_cmd;
 	char	**paths;
@@ -44,7 +44,8 @@ void		ft_error(char *str, int error);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 
 char		**ft_split(const char *s, char c);
-static int	count_words(const char *s, char c);
+//static int	count_words(const char *s, char c);
+void free_cmd_and_args(char **arg_cmd, char *cmd);
 
 char		*ft_strjoin(char const *s1, char const *s2);
 size_t		ft_strlen(const char *a);

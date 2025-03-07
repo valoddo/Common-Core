@@ -1,5 +1,5 @@
 # Nome della libreria statica
-NAME = pipex.a
+NAME = pipex
 
 # Compilatore e flag, -c compila i file .c e crea i file oggetto singolarmente
 CC = cc

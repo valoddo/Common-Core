@@ -14,7 +14,7 @@
 
 void	ft_error(char *str, int error)
 {
-	perror(str);
+	write(2, str, ft_strlen(str));
 	exit(error);
 }
 
@@ -41,16 +41,18 @@ char	*check_args(char **paths, char *argcmd)
 {
 	char	*directory;
 	char	*cmd;
+	int		i;
 
-	while (*paths)
+	i = 0;
+	while (paths[i])
 	{
-		directory = ft_strjoin(*paths, "/");
+		directory = ft_strjoin(paths[i], "/");
 		cmd = ft_strjoin(directory, argcmd);
 		free(directory);
 		if (access(cmd, X_OK) == 0)
 			return (cmd);
 		free(cmd);
-		paths++;
+		i++;
 	}
 	return (NULL);
 }
@@ -79,6 +81,9 @@ void	child_process(t_pipex pipex, char **argv, char **envp, int child)
 	if (!pipex.cmd)
 		ft_error("Command not valid", 1);
 	execve(pipex.cmd, pipex.arg_cmd, envp);
+	if (execve(pipex.cmd, pipex.arg_cmd, envp) == -1) 
+	ft_error("Execve failed", 1);
+	free_cmd_and_args(pipex.arg_cmd, pipex.cmd);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -90,18 +95,20 @@ int	main(int argc, char **argv, char **envp)
 	pipex.paths = ft_get_path(envp);
 	pipex.infd = open(argv[1], O_RDONLY);
 	if (pipex.infd == -1)
-		ft_error(argv[1], 1);
+		ft_error("Error file intput", 1);
 	pipex.outfd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (pipex.outfd == -1)
-		ft_error(argv[4], 1);
+		ft_error("Error file output", 1);
 	if (pipe(pipex.pipe_fd) == -1)
 		ft_error("Error Pipe", 1);
 	pipex.p_id = fork();
 	if (pipex.p_id == 0)
 		child_process(pipex, argv, envp, 1);
+	close(pipex.pipe_fd[1]);
 	pipex.p_id_2 = fork();
 	if (pipex.p_id_2 == 0)
 		child_process(pipex, argv, envp, 2);
+	close(pipex.pipe_fd[0]);
 	waitpid(pipex.p_id, NULL, 0);
 	waitpid(pipex.p_id_2, NULL, 0);
 	close(pipex.infd);

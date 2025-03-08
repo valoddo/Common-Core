@@ -53,10 +53,8 @@ static void	first_child_process(t_pipex pipex, char **argv, char **envp)
 		ft_error("Cmd", 3);
 	execve(pipex.cmd, pipex.arg_cmd, envp);
 	if (execve(pipex.cmd, pipex.arg_cmd, envp) == -1)
-	{
-		free_cmd_and_args(pipex.arg_cmd, pipex.cmd);
 		ft_error("zsh", 1);
-	}
+	free_cmd_and_args(pipex.arg_cmd, pipex.cmd);
 }
 
 static void	second_child_process(t_pipex pipex, char **argv, char **envp)
@@ -73,10 +71,8 @@ static void	second_child_process(t_pipex pipex, char **argv, char **envp)
 		ft_error("Cmd", 3);
 	execve(pipex.cmd, pipex.arg_cmd, envp);
 	if (execve(pipex.cmd, pipex.arg_cmd, envp) == -1)
-	{
-		free_cmd_and_args(pipex.arg_cmd, pipex.cmd);
 		ft_error("zsh", 1);
-	}
+	free_cmd_and_args(pipex.arg_cmd, pipex.cmd);
 }
 
 int	main(int argc, char **argv, char **envp)

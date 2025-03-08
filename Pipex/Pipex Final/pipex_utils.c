@@ -1,5 +1,4 @@
-#include "pipex.h"
-
+include "pipex.h"
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
@@ -15,54 +14,14 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return (0);
 }
 
-static int	count_words(const char *s, char c)
-{
-    int count = 0;
-    while (*s)
-    {
-        while (*s == c) s++;
-        if (*s) count++;
-        while (*s && *s != c) s++;
-    }
-    return count;
-}
-
-char	**ft_split(const char *s, char c)
-{
-    char **split;
-    int i = 0, j;
-    
-    if (!s) return NULL;
-    
-    split = (char **)malloc(sizeof(char *) * (count_words(s, c) + 1));
-    if (!split) return NULL;
-    
-    while (*s)
-    {
-        while (*s == c) s++;
-        j = 0;
-        while (s[j] && s[j] != c) j++;
-        if (j > 0)
-        {
-            split[i] = (char *)malloc(j + 1);
-            if (!split[i]) return NULL;
-            int k = 0;
-            while (k < j) split[i][k++] = *s++;
-            split[i++][k] = '\0';
-        }
-        while (*s && *s == c) s++;
-    }
-    split[i] = NULL;
-    return split;
-}
 size_t	ft_strlen(const char *a)
 {
-    size_t	i;
+	size_t	i;
 
-    i = 0;
-    while (a[i] != '\0')
-        i++;
-    return (i);
+	i = 0;
+	while (a[i] != '\0')
+		i++;
+	return (i);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -88,4 +47,43 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		final[i] = s1[i];
 	}
 	return (final);
+}
+
+void free_cmd_and_args(char **arg_cmd, char *cmd)
+{
+    if (arg_cmd)
+    {
+        int i = 0;
+        while (arg_cmd[i] != NULL) 
+        {
+            free(arg_cmd[i]);
+			i++;
+        }
+        free(arg_cmd);
+    }
+    if (cmd) 
+        free(cmd);
+}
+void	ft_error(char *str, int error)
+{
+	if (error == 2)
+	{
+		write(2, "Usage: ./pipex file1 cmd1 cmd2 file2\n", 38);
+		exit(EXIT_FAILURE);
+	}
+	else if (error == 3)
+	{
+		write(2, "zsh: Command not found\n", 25);
+		exit(EXIT_FAILURE);
+	}
+	else if (error == 4)
+	{
+		write(2, "zsh: Path not set\n", 20);
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		perror(str);
+		exit(error);
+	}
 }

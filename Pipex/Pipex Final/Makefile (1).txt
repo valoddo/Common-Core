@@ -1,5 +1,5 @@
 # Nome della libreria statica
-NAME = pipex.a
+NAME = pipex
 
 # Compilatore e flag, -c compila i file .c e crea i file oggetto singolarmente
 CC = cc
@@ -9,14 +9,14 @@ CFLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 # Lista dei file sorgenti e oggetti
-SRCS = pipex.c pipex_utils.c pipex.h
+SRCS = pipex.c pipex_utils.c ft_split.c
 
 OBJS = $(SRCS:.c=.o)
 
-# Regola per creare la libreria statica
+# Regola per creare l'eseguibile
 $(NAME): $(OBJS)
-	@ar rcs $(NAME) $(OBJS)
-	@echo "Libreria $(NAME) creata con successo!"
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)   
+	@echo "Eseguibile $(NAME) creato con successo!"
 
 # Regola per compilare i file .o dai file .c
 %.o: %.c

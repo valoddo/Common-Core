@@ -49,21 +49,21 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (final);
 }
 
-void free_cmd_and_args(char **arg_cmd, char *cmd)
+void ft_free_split(char **split_array)
 {
-    if (arg_cmd)
+    int i;
+
+    if (!split_array)
+        return;
+    i = 0;
+    while (split_array[i] != NULL)
     {
-        int i = 0;
-        while (arg_cmd[i] != NULL) 
-        {
-            free(arg_cmd[i]);
-			i++;
-        }
-        free(arg_cmd);
+        free(split_array[i]);
+        i++;
     }
-    if (cmd) 
-        free(cmd);
+    free(split_array);
 }
+
 void	ft_error(char *str, int error)
 {
 	if (error == 2)
@@ -87,6 +87,7 @@ void	ft_error(char *str, int error)
 		exit(error);
 	}
 }
+
 
 	{
 		perror(str);

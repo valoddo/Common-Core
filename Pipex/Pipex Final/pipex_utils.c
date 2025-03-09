@@ -1,4 +1,4 @@
-include "pipex.h"
+#include "pipex.h"
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
@@ -68,20 +68,26 @@ void	ft_error(char *str, int error)
 {
 	if (error == 2)
 	{
-		write(2, "Usage: ./pipex file1 cmd1 cmd2 file2\n", 38);
+		write(2, "Usage: ./pipex file1 cmd1 cmd2 file2\n", 37);
 		exit(EXIT_FAILURE);
 	}
 	else if (error == 3)
 	{
-		write(2, "zsh: Command not found\n", 25);
+		write(2, "zsh: Command not found\n", 24);
 		exit(EXIT_FAILURE);
 	}
 	else if (error == 4)
 	{
-		write(2, "zsh: Path not set\n", 20);
+		write(2, "zsh: Path not set\n", 19);
 		exit(EXIT_FAILURE);
 	}
 	else
+	{
+		perror(str);
+		exit(error);
+	}
+}
+
 	{
 		perror(str);
 		exit(error);

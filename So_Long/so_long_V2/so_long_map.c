@@ -106,7 +106,7 @@ void	ft_load_images(t_game *game)
 	game->exit_img = mlx_xpm_file_to_image(game->mlx, EXIT, &size, &size);
 	game->player_img = mlx_xpm_file_to_image(game->mlx, PLAYER, &size, &size);
 	if (!game->player_img || !game->wall_img || !game->empty_img || !game->exit_img)
-		ft_error_check(game, 4, "Error create window", 10);
+		ft_error_check(game, 4, "Error load image", 9);
 }
 
 void ft_render_map(t_game *game)

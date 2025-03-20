@@ -76,6 +76,9 @@ static void	sort_five(t_stack **a, t_stack **b)
 		}
 		ft_push_b(a, b);
 	}
+	sort_three(a);
+	while (*b)
+		ft_push_a(a, b);
 }
 
 // Ordina 4-5 elementi

@@ -96,6 +96,39 @@ void	ft_move_node(t_stack **a, t_stack **b)
 	cheapest_node = ft_cheapest(*b);
 	if (!cheapest_node)
 		return ;
+	while (*b != cheapest_node && *a != cheapest_node->target_node && cheapest_node->index <= median_b && cheapest_node->target_node->index <= median_a)
+		 	ft_rotate_ab(a, b);  // Ruota entrambi gli stack contemporaneamente
+	 // Caso 2: Entrambi i nodi sono nella seconda metà → reverse rotate entrambi
+	 while (*b != cheapest_node && *a != cheapest_node->target_node && cheapest_node->index > median_b && cheapest_node->target_node->index > median_a)
+		 	ft_reverse_ab(a, b);
+	while (*b != cheapest_node)
+	{
+		if (cheapest_node->index <= median_b)
+			ft_rotate_b(b);
+		else
+			ft_reverse_b(b);
+	}
+	while (*a != cheapest_node->target_node)
+	{
+		if (cheapest_node->target_node->index <= median_a)
+			ft_rotate_a(a);
+		else
+			ft_reverse_a(a);
+	}
+	ft_push_a(a, b);
+}
+
+void	ft_move_node(t_stack **a, t_stack **b)
+{
+	t_stack			*cheapest_node;
+	int				median_a;
+	int				median_b;
+
+	median_a = ft_stacklen(*a) / 2;
+	median_b = ft_stacklen(*b) / 2;
+	cheapest_node = ft_cheapest(*b);
+	if (!cheapest_node)
+		return ;
 	while (*b != cheapest_node)
 	{
 		if (cheapest_node->index <= median_b)

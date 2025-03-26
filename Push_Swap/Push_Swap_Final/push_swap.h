@@ -32,6 +32,7 @@ typedef struct s_stack
 
 // ft_split.c
 char	**ft_split(char const *s0, char const *s1, char c);
+int	word_count(char *s, char c);
 
 // ft_fill_stack.c
 void	ft_fill_stack(t_stack **a, char **argv, int argc);

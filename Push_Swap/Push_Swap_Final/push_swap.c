@@ -116,7 +116,8 @@ int	main(int argc, char **argv)
 
 	a = NULL;
 	b = NULL;
-	if (argc == 1 || (argc == 2 && argv[1][0] == '\0'))
+	if (argc == 1 || (argc == 2 && argv[1][0] == '\0') || \
+		(word_count(argv[1], ' ') == 0))
 		ft_error(&a, "Error: insert items", argv, 1);
 	else if (argc == 2)
 		argv = ft_split(argv[0], argv[1], ' ');

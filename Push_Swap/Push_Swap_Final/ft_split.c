@@ -12,7 +12,7 @@
 
 #include "push_swap.h"
 
-static int	word_count(char *s, char c)
+int	word_count(char *s, char c)
 {
 	int	i;
 	int	count;

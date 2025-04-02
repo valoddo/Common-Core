@@ -3,7 +3,7 @@ NAME = get_next_line.a
 
 # Compilatore e flag, -c compila i file .c e crea i file oggetto singolarmente
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 # Regola per compilare tutto
 all: $(NAME)

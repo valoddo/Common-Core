@@ -80,3 +80,22 @@ void	ft_set_index(t_stack *a)
 	assign_indexes(a, arr, size);
 	free(arr);
 }
+int	ft_check_order(t_stack *a)
+{
+	t_stack	*tmp;
+	int		i;
+
+	i = 0;
+	tmp = a;
+	while (tmp)
+	{
+		if (tmp->index != i)
+			return (1);
+		else 
+		{
+			tmp = tmp->next;
+			i++;
+		}
+	}
+	return (0);
+}

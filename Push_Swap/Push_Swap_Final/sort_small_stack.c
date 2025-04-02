@@ -93,7 +93,8 @@ static void	sort_five(t_stack **a, t_stack **b)
 
 void	ft_sort_small_stack(t_stack **a, t_stack **b)
 {
-	ft_set_index(*a);
+
+	//ft_set_index(*a);
 	if (ft_stacklen(*a) == 1)
 		return ;
 	else if (ft_stacklen(*a) == 2)
@@ -102,9 +103,9 @@ void	ft_sort_small_stack(t_stack **a, t_stack **b)
 		sort_three(a);
 	else if (ft_stacklen(*a) <= 5)
 	{
-		sort_five(a, b);
-		sort_three(a);
-		while (*b)
-			ft_push_a(a, b);
+			sort_five(a, b);
+			sort_three(a);
+			while (*b)
+				ft_push_a(a, b);
 	}
 }

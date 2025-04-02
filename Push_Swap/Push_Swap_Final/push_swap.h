@@ -39,6 +39,7 @@ void	ft_fill_stack(t_stack **a, char **argv, int argc);
 
 // index_bubble.c
 void	ft_set_index(t_stack *a);
+int	ft_check_order(t_stack *a);
 
 // push_swap_utils.c
 int		ft_stacklen(t_stack *a);

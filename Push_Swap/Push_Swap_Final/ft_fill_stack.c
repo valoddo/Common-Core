@@ -21,7 +21,7 @@ static int	ft_atoi(char *argv, int *nb)
 	i = 0;
 	sign = 1;
 	result = 0;
-	if (argv[i] == '+' || argv[i] == '-')
+	while (argv[i] == '+' || argv[i] == '-')
 	{
 		if (argv[i] == '-')
 			sign = -1;
@@ -31,8 +31,8 @@ static int	ft_atoi(char *argv, int *nb)
 	{
 		if (argv[i] >= '0' && argv[i] <= '9')
 			result = (result * 10) + (argv[i] - '0');
-		if ((result > INT_MAX || \
-			(sign == -1 && result > (long long)INT_MAX + 1)) || \
+		if ((sign == 1 && result > INT_MAX) || \
+			(sign == -1 && result > ((long long)INT_MAX + 1)) || \
 			(argv[i] < '0' || argv[i] > '9'))
 			return (0);
 		i++;

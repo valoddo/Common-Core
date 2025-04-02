@@ -122,6 +122,9 @@ int	main(int argc, char **argv)
 	else if (argc == 2)
 		argv = ft_split(argv[0], argv[1], ' ');
 	ft_fill_stack(&a, argv, argc);
+	ft_set_index(a);
+	if (ft_check_order(a) == 0)
+		return (0);
 	if (ft_stacklen(a) <= 5)
 		ft_sort_small_stack(&a, &b);
 	else

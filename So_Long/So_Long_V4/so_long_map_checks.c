@@ -42,22 +42,26 @@ void	ft_map_check_frame(t_game *game)
 
 void	ft_map_check_player(t_game *game)
 {
-	int	i;
-	int	j;
+	int	x;
+	int	y;
 	int	p;
 
 	p = 0;
-	i = 1;
-	while (game->map[i])
+	x = 0;
+	while (game->map[x])
 	{
-		j = 0;
-		while (game->map[i][j])
+		y = 0;
+		while (game->map[x][y])
 		{
-			if (game->map[i][j] == 'P')
+			if (game->map[x][y] == 'P')
+			{
+				game->player_x = x;
+				game->player_y = y;	
 				p += 1;
-			j++;
+			}
+			y++;
 		}
-		i++;
+		x++;
 	}
 	if (p != 1)
 		ft_error_check(game, 4, "Error: insert one Player\n", 7);
@@ -105,7 +109,8 @@ void	ft_map_check_collectible(t_game *game)
 		}
 		i++;
 	}
-	if (c == 0)
+	game->tot_collectible = c;
+	if (c <= 0)
 		ft_error_check(game, 4, "Error: insert at least one Collectible\n", 7);
 }
 
@@ -113,9 +118,7 @@ void	ft_map_check_field(t_game *game)
 {
 	int	i;
 	int	j;
-	int	c;
 
-	c = 0;
 	i = 1;
 	while (game->map[i])
 	{

@@ -29,19 +29,65 @@ void    ft_init_window(t_game *game)
     mlx_hook(game->win, 17, 1L << 17, ft_close_window, game);  // Gestisci chiusura finestra (DestroyNotify)
 }
 
-int ft_key_hook(int keycode, t_game *game) 
+int ft_key_hook(int keycode, t_game *game)
 {    
     if (keycode == KEY_ESC)
         ft_close_window(game);
-    // else if (keycode == KEY_D || keycode == ARROW_RIGHT)
-	// 	movement(0, 1, game);
-	// else if (keycode == KEY_A || keycode == ARROW_LEFT)
-	// 	movement(0, -1, game);
-	// else if (keycode == KEY_W || keycode == ARROW_UP)
-	// 	movement(-1, 0, game);
-	// else if (keycode== KEY_S || keycode == ARROW_DOWN)
-	// 	movement(1, 0, game);
+    else if (keycode == KEY_D || keycode == ARROW_RIGHT)
+	    ft_movement(game, 0, 1);
+	else if (keycode == KEY_A || keycode == ARROW_LEFT)
+     	ft_movement(game, 0, -1);
+	else if (keycode == KEY_W || keycode == ARROW_UP)
+	 	ft_movement(game, -1, 0);
+	else if (keycode== KEY_S || keycode == ARROW_DOWN)
+	 	ft_movement(game, 1, 0);
     return (0);
+}
+
+
+void ft_movement(t_game *game, int delta_x, int delta_y)
+{
+    int new_x = game->player_x + delta_x;
+    int new_y = game->player_y + delta_y;
+
+    // Controllo dei bordi della mappa
+    if (new_x < 0 || new_y < 0 || new_x >= game->row || new_y >= game->col)
+        return;
+
+    char target_tile = game->map[new_x][new_y];
+
+    // Controllo muri
+    if (target_tile == '1')
+        return;
+
+    // Controllo uscita
+    if (target_tile == 'E') {
+        if (game->tot_collectible == 0)
+            ft_close_window(game);
+        return;
+    }
+
+    // Gestione collezionabili
+    if (target_tile == 'C') {
+        game->tot_collectible--;
+        game->map[new_x][new_y] = '0';
+    }
+
+    // Aggiornamento grafico
+    mlx_put_image_to_window(game->mlx, game->win, game->empty_img, 
+                          game->player_y * 32, game->player_x * 32);
+    
+    // Aggiornamento posizione giocatore
+    game->player_x = new_x;
+    game->player_y = new_y;
+    
+    // Disegna nuovo giocatore
+    mlx_put_image_to_window(game->mlx, game->win, game->player_img,
+                          new_y * 32, new_x * 32);
+
+    // (Opzionale) Aggiorna contatore mosse
+    game->moves++;
+    printf("Moves: %d\n", game->moves);
 }
 
 int ft_close_window(t_game *game)
@@ -50,7 +96,13 @@ int ft_close_window(t_game *game)
     mlx_destroy_image(game->mlx, game->wall_img);
     mlx_destroy_image(game->mlx, game->collect_img);
     mlx_destroy_image(game->mlx, game->exit_img);
+    mlx_destroy_image(game->mlx, game->exit_1_img);
     mlx_destroy_image(game->mlx, game->player_img);
+    mlx_destroy_image(game->mlx, game->player_1_img);
+    mlx_destroy_image(game->mlx, game->player_lside_img);
+    mlx_destroy_image(game->mlx, game->player_lside_1_img);
+    mlx_destroy_image(game->mlx, game->player_rside_img);
+    mlx_destroy_image(game->mlx, game->player_rside_1_img);
     mlx_destroy_window(game->mlx, game->win); // Chiudi la finestra
     mlx_destroy_display(game->mlx);
     free(game->mlx);

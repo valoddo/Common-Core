@@ -24,6 +24,8 @@ char	**ft_parsing(int argc, char **argv, t_game *game)
 	ft_map_check_exit(game);
 	ft_map_check_collectible(game);
 	ft_map_check_field(game);
+	ft_check_valid_path(game);
+	game->moves = 0; // INIZIALIZZA CONTATORE MOSSE
 	return (game->map);
 }
 
@@ -118,7 +120,13 @@ void	ft_load_images(t_game *game)
 	game->wall_img = mlx_xpm_file_to_image(game->mlx, WALL, &size, &size);
 	game->collect_img = mlx_xpm_file_to_image(game->mlx, COLLECT, &size, &size);
 	game->exit_img = mlx_xpm_file_to_image(game->mlx, EXIT, &size, &size);
+	game->exit_1_img = mlx_xpm_file_to_image(game->mlx, EXIT_1, &size, &size);
 	game->player_img = mlx_xpm_file_to_image(game->mlx, PLAYER, &size, &size);
+	game->player_1_img = mlx_xpm_file_to_image(game->mlx, PLAYER_1, &size, &size);
+	game->player_lside_img = mlx_xpm_file_to_image(game->mlx, PLAYER_LSIDE, &size, &size);
+	game->player_lside_1_img = mlx_xpm_file_to_image(game->mlx, PLAYER_LSIDE_1, &size, &size);
+	game->player_rside_img = mlx_xpm_file_to_image(game->mlx, PLAYER_RSIDE, &size, &size);
+	game->player_rside_1_img = mlx_xpm_file_to_image(game->mlx, PLAYER_RSIDE_1, &size, &size);
 	if (!game->player_img || !game->wall_img || !game->empty_img || !game->exit_img)
 		ft_error_check(game, 4, "Error: Failed to load images\n", 9);
 }
@@ -129,24 +137,23 @@ void ft_render_map(t_game *game)
 	int	j;
 
 	i = 0;
-	while (game->map[i]) // Cicla sulle righe della mappa
+	while (game->map[i])
 	{
 		j = 0;
-		while (game->map[i][j]) // Cicla sulle colonne della mappa
+		while (game->map[i][j])
 		{
-			mlx_put_image_to_window(game->mlx, game->win, game->empty_img, j * 32, i * 32); // Disegna sempre il terreno per evitare artefatti grafici
-			if (game->map[i][j] == '1')  // Parete
+			mlx_put_image_to_window(game->mlx, game->win, game->empty_img, j * 32, i * 32);
+			if (game->map[i][j] == '1')
 				mlx_put_image_to_window(game->mlx, game->win, game->wall_img, j * 32, i * 32);
-			else if (game->map[i][j] == 'C')  // Giocatore
-				 mlx_put_image_to_window(game->mlx, game->win, game->collect_img, j * 32, i * 32);
-			else if (game->map[i][j] == 'E')  // Uscita
+			else if (game->map[i][j] == 'C')
+				mlx_put_image_to_window(game->mlx, game->win, game->collect_img, j * 32, i * 32);
+			else if (game->map[i][j] == 'E')
 				mlx_put_image_to_window(game->mlx, game->win, game->exit_img, j * 32, i * 32);
-			else if (game->map[i][j] == 'P')  // Giocatore
-				mlx_put_image_to_window(game->mlx, game->win, game->player_img, j * 32, i * 32);
 			j++;
 		}
 		i++;
 	}
+	mlx_put_image_to_window(game->mlx, game->win, game->player_img, game->player_y * 32, game->player_x * 32);
 }
 
 // char	**ft_fill_map(char **argv, t_game *game)

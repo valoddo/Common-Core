@@ -12,7 +12,6 @@
 
 #include "so_long.h"
 
-
 char	**ft_fill_map(char **argv, t_game *game)
 {
 	int	fd;

@@ -27,7 +27,8 @@ void	ft_map_check_frame(t_game *game)
 	i = 0;
 	while (i < game->row)
 	{
-		if (game->map[i][0] != '1' || game->map[i][game->col - 1] != '1')
+		if (game->map[i][0] != '1' || game->map[i][game->col - 1] != '1' || \
+			game->col == game->row)
 			ft_error_check(game, 4, "Error: insert valid rectangular map\n", 8);
 		i++;
 	}

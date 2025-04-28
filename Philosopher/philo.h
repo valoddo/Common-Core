@@ -15,8 +15,49 @@
 
 # include <unistd.h>
 # include <stdio.h>
-# include <pthread.h> //libreria dei thread
-# include "ft_printf/ft_printf.h"
+# include <stdlib.h>
+# include <pthread.h> //libreria dei thread e mutex
+# include <sys/time.h> // libreria per gettimeofday
+# include <limits.h>
+
+typedef struct s_program t_program;
+
+typedef struct s_philo {
+    pthread_t       thread;
+    int             id;
+    int             meals_eaten;
+    size_t          last_meal;
+    size_t          time_to_die;
+    size_t          time_to_eat;
+    size_t          time_to_sleep;
+    size_t          start_time;
+    int             num_times_to_eat;
+    int             *dead;
+    pthread_mutex_t *l_fork;
+    pthread_mutex_t *r_fork;
+    pthread_mutex_t *write_lock;
+    pthread_mutex_t *dead_lock;
+    pthread_mutex_t *meal_lock;
+} t_philo;
+
+struct s_program {
+    int             dead_flag;
+    pthread_mutex_t dead_lock;
+    pthread_mutex_t meal_lock;
+    pthread_mutex_t write_lock;
+    pthread_mutex_t forks[200];    // Array fisso per 200 mutex
+    t_philo         philos[200];   // Array fisso per 200 filosofi
+};
+
+// error.philo.h
+// void	ft_free_memory(t_philo *philo, int i);
+int		ft_error_check(char *msg, int free_level);
+void	ft_putstr(char *str);
+void	ft_check_input(int argc, char **argv);
+int		ft_atoi(char *argv);
+void    init_program(t_program *program, char **argv, int argc);
+void    init_philos(t_program *program, char **argv, int num_philos);
+
 
 # endif
 

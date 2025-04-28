@@ -1,22 +1,21 @@
-# Nome della libreria
+# Nome della libreria statica
 NAME = philo
 
 # Compilatore e flag, -c compila i file .c e crea i file oggetto singolarmente
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 
 # Regola per compilare tutto
 all: $(NAME)
 
 # Lista dei file sorgenti e oggetti
-SRCS = 
+SRCS = philo.c error_philo.c
 
 OBJS = $(SRCS:.c=.o)
 
-# Regola per creare l'eseguibile di minilibx, libft e get_next_line
+# Regola per creare la libreria statica
 $(NAME): $(OBJS)
-	make -C ft_printf
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) ft_printf/ft_printf.a
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) 
 	@echo "Eseguibile $(NAME) creato con successo!"
 
 # Regola per compilare i file .o dai file .c
@@ -25,13 +24,11 @@ $(NAME): $(OBJS)
 
 # Regola per pulire i file oggetto
 clean:
-	make -C ft_printf fclean
-	@rm -f $(OBJS) 
+	@rm -f $(OBJS)
 	@echo "Pulizia file oggetto completata!"
 
 # Regola per pulire tutto (file oggetto + libreria)
 fclean: clean
-	make -C ft_printf fclean
 	@rm -f $(NAME)
 	@echo "Pulizia completa (incluso $(NAME))!"
 
@@ -40,4 +37,3 @@ re: fclean all
 
 # Evita errori nel caso i nomi delle regole coincidano con file reali
 .PHONY: all clean fclean re
-

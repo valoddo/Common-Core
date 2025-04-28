@@ -37,3 +37,4 @@ re: fclean all
 
 # Evita errori nel caso i nomi delle regole coincidano con file reali
 .PHONY: all clean fclean re
+

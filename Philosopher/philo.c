@@ -6,13 +6,13 @@
 /*   By: vloddo <vloddo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:49:22 by vloddo            #+#    #+#             */
-/*   Updated: 2025/04/09 18:11:53 by vloddo           ###   ########.fr       */
+/*   Updated: 2025/04/28 19:34:05 by vloddo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "philo.h"
 
-void	ft_check_input(int argc, char **argv)
+void	ft_check_input(t_program *program, int argc, char **argv)
 {
 	int	i;
 	int	value;
@@ -22,9 +22,10 @@ void	ft_check_input(int argc, char **argv)
 	{
 		value = ft_atoi(argv[i]);
 		if ((value > 200 && i == 1) || ( value <= 0 && i != argc - 1))
-			ft_error_check("Error: Values must be > 0 (except last one)\n", 2);
+			ft_error_check("Error: Check valid values\n", 2);
 		i++;
 	}
+    program->num_philos = ft_atoi(argv[1]);
 }
 
 int	ft_atoi(char *argv)
@@ -54,9 +55,8 @@ int	ft_atoi(char *argv)
 	return ((int)result);
 }
 
-void init_program(t_program *program, char **argv, int argc)
+void	init_program(t_program *program)
 {
-    (void)argc;
     int i;
     
     program->dead_flag = 0;
@@ -65,7 +65,7 @@ void init_program(t_program *program, char **argv, int argc)
     pthread_mutex_init(&program->write_lock, NULL);
     
     i = 0;
-    while (i < 200) 
+    while (i < program->num_philos) 
 	{
         pthread_mutex_init(&program->forks[i], NULL);
         i++;
@@ -73,47 +73,63 @@ void init_program(t_program *program, char **argv, int argc)
 }
 
 
-void init_philos(t_program *program, char **argv, int num_philos)
+void	init_philos(t_program *program, char **argv, int argc)
 {
-    size_t start_time = get_current_time();
-    int i;
-    
-    i = 0;
-    while (i < num_philos) 
+	int		i;
+	size_t	current_time;
+
+	current_time = get_current_time();
+	i = 0;
+	while (i < program->num_philos)
 	{
-        program->philos[i] = (t_philo)
-		{
-            .id = i + 1,
-            .dead = &program->dead_flag,
-            .l_fork = &program->forks[i],
-            .r_fork = &program->forks[(i + 1) % num_philos],
-            .write_lock = &program->write_lock,
-            .dead_lock = &program->dead_lock,
-            .meal_lock = &program->meal_lock,
-            .time_to_die = ft_atoi(argv[2]),
-            .time_to_eat = ft_atoi(argv[3]),
-            .time_to_sleep = ft_atoi(argv[4]),
-            .num_times_to_eat = (argc == 6) ? ft_atoi(argv[5]) : -1,
-            .start_time = start_time,
-            .last_meal = start_time,
-            .meals_eaten = 0
-        };
-        i++;
-    }
+		new_philo(program, argv, i, current_time);
+		if (argc == 6)
+			program->philos[i].num_times_to_eat = ft_atoi(argv[5]);
+		else
+			program->philos[i].num_times_to_eat = -1;
+		i++;
+	}
+}
+
+
+size_t	get_current_time(void)
+{
+	struct timeval	tv;
+
+	if ( gettimeofday(&tv, NULL) == -1)
+		ft_error_check("Error: gettimeofday failed\n", 2);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+}
+
+void	new_philo(t_program *program, char **argv, int i, size_t current_time)
+{
+	program->philos[i] = (t_philo) // Assegnazione diretta della struct
+	{
+		.id = i + 1,
+		.meals_eaten = 0,
+		.dead = &program->dead_flag,
+		.last_meal = current_time,
+		.time_to_die = ft_atoi(argv[2]),
+		.time_to_eat = ft_atoi(argv[3]),
+		.time_to_sleep = ft_atoi(argv[4]),
+		.start_time = current_time,
+		.l_fork = &program->forks[i],
+		.r_fork = &program->forks[(i + 1) % program->num_philos], // Modulo per circolarità
+		.write_lock = &program->write_lock, // Mutex per operazioni di I/O
+		.dead_lock = &program->dead_lock, // Mutex per lo stato di morte
+		.meal_lock = &program->meal_lock,  // Mutex per i pasti
+	};
 }
 
 int	main(int argc, char **argv)
 {
 	t_program		program;
-	int				num_of_philos;
 	int				i;
 
 	if (argc == 1 || argc < 5 || argc > 6)
-		ft_error_check("Error: Insert valid number of Args\n", 2);
-	ft_check_input(argc, argv);
-	num_of_philos = ft_atoi(argv[1]);	// Parse args , get num_of_philos
-	init_program(&program, argv, argc);
-    init_philos(&program, argv, num_philos);
-
+		ft_error_check("Error: Insert valid number of args\n", 2);
+	ft_check_input(&program, argc, argv);
+	init_program(&program);
+    init_philos(&program, argv, argc);
 	return (0);
 }

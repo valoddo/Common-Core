@@ -6,7 +6,7 @@
 /*   By: vloddo <vloddo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:49:35 by vloddo            #+#    #+#             */
-/*   Updated: 2025/04/28 19:28:58 by vloddo           ###   ########.fr       */
+/*   Updated: 2025/04/29 20:21:01 by vloddo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct	s_program t_program;
 typedef struct	s_philo
 {
 	pthread_t		thread;
+	int				num_philos;
 	int				id;
 	int				meals_eaten;
 	int				num_times_to_eat;
@@ -43,7 +44,6 @@ typedef struct	s_philo
 
 struct	s_program
 {
-	int				num_philos;
 	int				dead_flag;
 	pthread_mutex_t	dead_lock;
 	pthread_mutex_t	meal_lock;
@@ -58,7 +58,7 @@ void	ft_putstr(char *str);
 // void	ft_free_memory(t_philo *philo, int i);
 
 // philo.c
-void	ft_check_input(t_program *program, int argc, char **argv);
+void	ft_check_input(int argc, char **argv);
 int		ft_atoi(char *argv);
 void	init_program(t_program *program);
 void	init_philos(t_program *program, char **argv, int argc);

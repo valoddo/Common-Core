@@ -6,7 +6,7 @@
 /*   By: vloddo <vloddo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:49:22 by vloddo            #+#    #+#             */
-/*   Updated: 2025/04/29 20:51:54 by vloddo           ###   ########.fr       */
+/*   Updated: 2025/04/30 19:02:11 by vloddo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ size_t	get_current_time(void)
 
 void	new_philo(t_program *program, char **argv, int i, size_t current_time)
 {
-	program->philos[i] = (t_philo) // Assegnazione diretta della struct
+	program->philos[i] = (t_philo) // Assegnazione diretta della struct, I filosofi vengono inizializzati direttamente nell'array philos senza allocazione dinamica
 	{
 		.num_philos = ft_atoi(argv[1]),
 		.id = i + 1,
@@ -102,9 +102,9 @@ void	new_philo(t_program *program, char **argv, int i, size_t current_time)
 
 void	init_program(t_program *program)
 {
-	int i;
+	int i; // i mutex negli array forks e quelli singoli (dead_lock, meal_lock, write_lock) sono inizializzati tramite pthread_mutex_init, ma la loro memoria è gestita staticamente dalla struttura t_program.
 	
-	program->dead_flag = 0;
+	program->dead_flag = 0; 
 	pthread_mutex_init(&program->dead_lock, NULL);
 	pthread_mutex_init(&program->meal_lock, NULL);
 	pthread_mutex_init(&program->write_lock, NULL);
@@ -117,9 +117,19 @@ void	init_program(t_program *program)
 	}
 }
 
+int	ft_usleep(size_t milliseconds)
+{
+	size_t	start; // funzione usleep che include il ciclo while per gestire interruzioni e tempo minimo
+
+	start = get_current_time();
+	while ((get_current_time() - start) < milliseconds)
+		usleep(500); // funzione che sospende l'esecuzione del programma chiamante per un numero specificato di microsecondi. 500 corrisponde a 500 microsecondi, un buon compromesso tra precisione e overhead
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
-	t_program		program;
+	t_program		program; // Allocazione automatica (stack), le strutture t_philo e s_program non utilizzano puntatori per gli array principali (come philos e forks), ma array fissi. 
 
 	if (argc == 1 || argc < 5 || argc > 6)
 		ft_error_check("Error: Insert valid number of args\n", 2);
@@ -128,3 +138,8 @@ int	main(int argc, char **argv)
 	init_program(&program);
 	return (0);
 }
+
+// Il codice evita correttamente malloc grazie a:
+// Array statici nella struttura t_program.
+// Controllo dell'input per rispettare la dimensione degli array.
+// Inizializzazione diretta delle strutture.

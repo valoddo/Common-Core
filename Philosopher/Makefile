@@ -13,9 +13,10 @@ SRCS = philo.c error_philo.c
 
 OBJS = $(SRCS:.c=.o)
 
-# Regola per creare la libreria statica
+# Regola per creare l'eseguibile di ft_printf
 $(NAME): $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) 
+	make -C ft_printf
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) ft_printf/ft_printf.a
 	@echo "Eseguibile $(NAME) creato con successo!"
 
 # Regola per compilare i file .o dai file .c
@@ -29,6 +30,7 @@ clean:
 
 # Regola per pulire tutto (file oggetto + libreria)
 fclean: clean
+	make -C ft_printf fclean
 	@rm -f $(NAME)
 	@echo "Pulizia completa (incluso $(NAME))!"
 

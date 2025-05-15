@@ -16,7 +16,7 @@ OBJS = $(SRCS:.c=.o)
 # Regola per creare l'eseguibile di ft_printf
 $(NAME): $(OBJS)
 	make -C ft_printf
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) ft_printf/ft_printf.a
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) ft_printf/ft_printf.a -pthread
 	@echo "Eseguibile $(NAME) creato con successo!"
 
 # Regola per compilare i file .o dai file .c

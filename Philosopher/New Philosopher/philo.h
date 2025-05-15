@@ -6,7 +6,7 @@
 /*   By: vloddo <vloddo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:49:35 by vloddo            #+#    #+#             */
-/*   Updated: 2025/05/07 16:49:30 by vloddo           ###   ########.fr       */
+/*   Updated: 2025/05/15 17:51:13 by vloddo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct	s_philo
 	pthread_mutex_t	*write_lock;
 	pthread_mutex_t	*dead_lock;
 	pthread_mutex_t	*meal_lock;
+	t_program		*program;
 }	t_philo;
 
 struct	s_program
@@ -54,18 +55,19 @@ struct	s_program
 };
 
 // error_philo.c
-int		ft_error_check(char *msg, int free_level);
+void	ft_error_check(char *msg, t_program *program, int exit_code);
+void	ft_clean_program(t_program *program);
 // void	ft_putstr(char *str);
 // void	ft_free_memory(t_philo *philo, int i);
 
 // philo.c
-void	ft_check_input(int argc, char **argv);
-int		ft_atoi(char *argv);
+void	ft_check_input(int argc, char **argv, t_program *program);
+int		ft_atoi(char *argv, t_program *program);
 void	ft_init_philos(t_program *program, char **argv, int argc);
-size_t	ft_get_current_time(void);
+size_t	ft_get_current_time(t_program *program);
 void	ft_new_philo(t_program *program, char **argv, int i, size_t current_time);
-void	ft_init_program(t_program *program, char **argv);
-int		ft_usleep(size_t milliseconds);
+void	ft_init_program(t_program *program);
+int		ft_usleep(size_t milliseconds, t_program *program);
 
 
 // philo_routine.c
@@ -75,8 +77,9 @@ int		ft_check_meals(t_philo *philo);
 void	ft_take_forks(t_philo *philo);
 void	ft_release_forks(t_philo *philo);
 void	ft_eat(t_philo *philo);
-void	ft_philo_sleep(t_philo *philo);
+void	ft_sleep(t_philo *philo);
 void	ft_think(t_philo *philo);
 void	ft_log_action(t_philo *philo, char *action);
+void	*ft_monitor(void *arg);
 
 # endif

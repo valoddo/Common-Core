@@ -1,0 +1,188 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_routine.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vloddo <vloddo@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/09 17:49:22 by vloddo            #+#    #+#             */
+/*   Updated: 2025/05/17 19:28:27 by vloddo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+# include "philo.h"
+
+void	*ft_philo_routine(void *arg)
+{
+	t_philo *philo = (t_philo *)arg;
+
+	if (philo->id % 2 == 0) // Solo i filosofi con ID dispari iniziano prendendo la forchetta destra
+		ft_usleep(philo->time_to_eat / 2, philo->program);
+
+	if (philo->program->num_philos == 1)
+		return(ft_single_philo(philo));
+	if (philo->id % 2 == 0) // Solo i filosofi con ID dispari iniziano prendendo la forchetta destra
+		ft_usleep(philo->time_to_eat / 2, philo->program); // i filosofi pari Vengono ritardati di time_to_eat / 2 millisecondi prima di iniziare
+	while (1)
+	{
+		if (ft_check_death(philo)) // 1. Controllo morte
+			return (NULL);
+		if (ft_check_meals(philo)) // 1. Controllo meals
+			return (NULL);
+		ft_take_forks(philo); // 2. Prendi le forchette
+		ft_eat(philo); // 3. Mangia
+		ft_release_forks(philo); // 4. Rilascia forchette
+		if (ft_check_meals(philo)) // 1. Controllo meals
+			return (NULL);
+		ft_sleep(philo); // 5. Dormi
+		ft_think(philo); // 6. Pensiero
+	}
+	return (NULL);
+}
+
+// void	*ft_single_philo(t_philo *philo)
+// {
+// 	size_t timestamp;
+
+// 	ft_printf("0 1 has taken a fork\n");
+// 	timestamp = ft_get_current_time(philo->program) - philo->start_time;
+// 	ft_printf("%u 1 died\n", timestamp);
+// 	return (NULL);
+// }
+
+void	*ft_single_philo(t_philo *philo)
+{
+	ft_printf("0 1 has taken a fork\n");
+	pthread_mutex_lock(philo->dead_lock);
+	*(philo->dead) = 1;
+	pthread_mutex_unlock(philo->dead_lock);
+	return (NULL);
+}
+
+// void	*ft_single_philo(t_philo *philo)
+// {
+// 	ft_printf("0 1 has taken a fork\n");
+// 	ft_log_action_dead(philo, "died");
+// 	return (NULL);
+// }
+
+// 1. Controllo Morte:
+int	ft_check_death(t_philo *philo)
+{
+	size_t current;
+	
+	pthread_mutex_lock(philo->meal_lock);
+	pthread_mutex_lock(philo->dead_lock);
+	current = ft_get_current_time(philo->program);
+	if (philo->time_to_die <= (current - philo->last_meal))
+	{
+		*(philo->dead) = 1;
+		pthread_mutex_unlock(philo->dead_lock);
+		pthread_mutex_unlock(philo->meal_lock);
+		return (1);
+	}
+	// else if (*(philo->dead) == 1)
+	// {
+	// 	pthread_mutex_unlock(philo->dead_lock);
+	// 	pthread_mutex_unlock(philo->meal_lock);
+	// 	return (1);
+	// }
+	pthread_mutex_unlock(philo->dead_lock);
+	pthread_mutex_unlock(philo->meal_lock);
+	return (0);
+}
+// 1. Controllo Meals:
+int	ft_check_meals(t_philo *philo)
+{
+	if (philo->num_times_to_eat == -1)
+		return (0); // Mangia infinitamente
+
+	pthread_mutex_lock(philo->meal_lock);
+	if (philo->meals_eaten >= philo->num_times_to_eat)
+	{
+		pthread_mutex_unlock(philo->meal_lock);
+		return (1);
+	}
+	pthread_mutex_unlock(philo->meal_lock);
+	return (0);
+}
+
+void	ft_take_forks(t_philo *philo)
+{
+    // Strategia anti-deadlock: filosofi pari prendono prima la sinistra e i filosofi dispari prendono prima la destra
+	if (philo->id % 2 == 0)
+	{
+		pthread_mutex_lock(philo->l_fork);
+		ft_log_action(philo, "has taken a fork");
+		pthread_mutex_lock(philo->r_fork);
+		ft_log_action(philo, "has taken a fork");
+	}
+	else
+	{
+		pthread_mutex_lock(philo->r_fork);
+		ft_log_action(philo, "has taken a fork");
+		pthread_mutex_lock(philo->l_fork);
+		ft_log_action(philo, "has taken a fork");
+	}
+}
+
+//2. Gestione Forchette:
+void	ft_release_forks(t_philo *philo)
+{
+	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_unlock(philo->r_fork);
+}
+
+//3. Azioni del Filosofo:
+void	ft_eat(t_philo *philo)
+{
+	pthread_mutex_lock(philo->meal_lock);
+	philo->last_meal = ft_get_current_time(philo->program);
+	philo->meals_eaten++;
+	pthread_mutex_unlock(philo->meal_lock);
+	ft_log_action(philo, "is eating");
+	ft_usleep(philo->time_to_eat, philo->program);
+}
+
+void	ft_sleep(t_philo *philo)
+{
+	ft_log_action(philo, "is sleeping");
+	ft_usleep(philo->time_to_sleep, philo->program);
+}
+
+void	ft_think(t_philo *philo)
+{
+	ft_log_action(philo, "is thinking");
+}
+
+//4. Logging Sincronizzato:
+void	ft_log_action(t_philo *philo, char *action)
+{
+	size_t timestamp;
+
+	pthread_mutex_lock(philo->dead_lock);
+	if (*(philo->dead) == 1)
+	{
+		pthread_mutex_unlock(philo->dead_lock);
+		return;
+	}
+	pthread_mutex_unlock(philo->dead_lock);
+	timestamp = ft_get_current_time(philo->program) - philo->start_time;
+	pthread_mutex_lock(philo->write_lock);
+	ft_printf("%u %d %s\n", timestamp, philo->id, action);
+	pthread_mutex_unlock(philo->write_lock);
+}
+//4. Logging Sincronizzato Morte:
+void	ft_log_action_dead(t_philo *philo, char *action)
+{
+	size_t timestamp;
+
+	pthread_mutex_lock(philo->dead_lock);
+	if (*(philo->dead) == 1)
+		philo->program->dead_flag = 1;
+	pthread_mutex_unlock(philo->dead_lock);
+	timestamp = ft_get_current_time(philo->program) - philo->start_time;
+	pthread_mutex_lock(philo->write_lock);
+	ft_printf("%u %d %s\n", timestamp, philo->id, action);
+	pthread_mutex_unlock(philo->write_lock);
+}

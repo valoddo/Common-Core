@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   printf.h                                           :+:      :+:    :+:   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vloddo <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vloddo <vloddo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 18:23:58 by vloddo            #+#    #+#             */
-/*   Updated: 2025/01/09 18:28:47 by vloddo           ###   ########.fr       */
+/*   Updated: 2025/05/15 17:09:16 by vloddo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <ctype.h>
 # include <limits.h>
 # include <unistd.h>
+# include <stdarg.h>
 
 int			ft_print_char(int c);
 int			ft_print_str(char *s);
